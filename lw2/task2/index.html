@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Редактор изображений</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <p>
+        Разработайте приложение, позволяющее рисовать при помощи мыши на растровом изображении. Изображение пользователь
+        может либо создать с нуля (File->New), либо выбрать существующий файл изображения (File->Open). Программа должна
+        поддерживать хотя бы один из стандартных форматов изображений: PNG, JPEG, BMP. Рисование начинается при нажатии
+        левой кнопки мыши внутри клиентской области и продолжается при перемещении мыши при нажатой кнопке мыши
+        аналогично инструментам «Кисть» или «Карандаш» в графическом редакторе Paint. Толщину рисуемых линий выберите на
+        своё усмотрение.<br />
+        Пункт меню File->Save As позволяет пользователю сохранить рисунок в одном из следующих форматов: PNG, BMP, JPEG.
+        <br /><br />
+        Бонус - 20 баллов<br />
+        Бонус начисляется за возможность выбора цвета рисования. Используйте либо стандартный диалог выбора цвета, либо
+        разработайте собственный.
+    </p>
+
+    <div>
+        <select id="select">
+            <option selected disabled hidden>Файл</option>
+            <option value="new-file">Создать</option>
+            <option value="open-file">Открыть</option>
+            <optgroup label="Сохранить как">Сохранить как
+                <option value="save-png-file">Сохранить как PNG</option>
+                <option value="save-jpg-file">Сохранить как JPG</option>
+                <option value="save-bmp-file">Сохранить как BMP</option>
+            </optgroup>
+        </select>
+        <input type="color" id="pen-color-input" />
+        <input type="file" id="file-input" hidden />
+    </div>
+    <canvas class="canvas" id="canvas" width="600" height="600"></canvas>
+
+    <script data-main="main.js" src="../../lib/require.js"></script>
+</body>
+
+</html>
