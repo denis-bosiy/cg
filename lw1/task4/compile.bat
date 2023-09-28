@@ -1,0 +1,1 @@
+npx tsc -t es5 --lib ES6,dom,es2017 view/view.ts --module amd

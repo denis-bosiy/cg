@@ -1,0 +1,1 @@
+npx tsc -t es5 solution.ts --module amd
