@@ -1,146 +1,126 @@
-define(["require", "exports", "./CPoint"], function (require, exports, CPoint_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.main = void 0;
-    var toRadians = function (angleInDegrees) {
-        return angleInDegrees * (Math.PI / 180);
-    };
-    var drawCoordinateAxes = function (margin, ctx) {
-        var AXE_LINE_LENGTH = 300;
-        var AXE_ARROW_LENGTH = AXE_LINE_LENGTH / 20;
-        var AXE_DIVISION_LENGTH = 10;
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 5;
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        // Построение прямых осей
-        ctx.moveTo(margin, margin);
-        ctx.lineTo(margin, margin + AXE_LINE_LENGTH);
-        ctx.lineTo(margin + AXE_LINE_LENGTH, margin + AXE_LINE_LENGTH);
-        ctx.lineWidth = 3;
-        // Построение стрелок оси Y
-        ctx.moveTo(margin - Math.round(Math.sin(toRadians(30)) * AXE_ARROW_LENGTH), margin + Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH));
-        ctx.lineTo(margin, margin);
-        ctx.moveTo(margin + Math.round(Math.sin(toRadians(30)) * AXE_ARROW_LENGTH), margin + Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH));
-        ctx.lineTo(margin, margin);
-        // Построение стрелок оси X
-        ctx.moveTo(margin + AXE_LINE_LENGTH - Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH), margin + AXE_LINE_LENGTH - Math.round(Math.sin(toRadians(30)) * AXE_ARROW_LENGTH));
-        ctx.lineTo(margin + AXE_LINE_LENGTH, margin + AXE_LINE_LENGTH);
-        ctx.moveTo(margin + AXE_LINE_LENGTH - Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH), margin + AXE_LINE_LENGTH + Math.round(Math.sin(toRadians(30)) * AXE_ARROW_LENGTH));
-        ctx.lineTo(margin + AXE_LINE_LENGTH, margin + AXE_LINE_LENGTH);
-        ctx.lineWidth = 1;
-        // Построение делений оси Y
-        for (var i = AXE_DIVISION_LENGTH; i < AXE_LINE_LENGTH - Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH); i += AXE_DIVISION_LENGTH) {
-            ctx.moveTo(margin - Math.round(AXE_DIVISION_LENGTH / 2), margin + AXE_LINE_LENGTH - i);
-            ctx.lineTo(margin + Math.round(AXE_DIVISION_LENGTH / 2), margin + AXE_LINE_LENGTH - i);
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
         }
-        // Построение делений оси X
-        for (var i = AXE_DIVISION_LENGTH + Math.round(Math.sin(toRadians(60)) * AXE_ARROW_LENGTH); i < AXE_LINE_LENGTH; i += AXE_DIVISION_LENGTH) {
-            ctx.moveTo(margin + AXE_LINE_LENGTH - i, margin + AXE_LINE_LENGTH - Math.round(AXE_DIVISION_LENGTH / 2));
-            ctx.lineTo(margin + AXE_LINE_LENGTH - i, margin + AXE_LINE_LENGTH + Math.round(AXE_DIVISION_LENGTH / 2));
-        }
-        ctx.closePath();
-        ctx.stroke();
-    };
-    var drawBezierCurve = function (referencePoints, ctx) {
-        // Формула кривой Безье для 4-х точек
-        // P = (1−t)^3*P1 + 3*(1−t)^2*t*P2 +3*(1−t)*t^2*P3 + t^3*P4
-        if (referencePoints.length !== 4) {
-            return;
-        }
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([]);
-        ctx.beginPath();
-        // x = (1-t)^3*x1 + 3*(1-t)^2*t*x2 +3*(1-t)*t^2*x3 + t^3*x4
-        // y = (1-t)^3*y1 + 3*(1-t)^2*t*y2 +3*(1-t)*t^2*y3 + t^3*y4
-        var startX = referencePoints[0].x;
-        var startY = referencePoints[0].y;
-        ctx.moveTo(startX, startY);
-        for (var t = 0.01; t <= 1.01; t += 0.01) {
-            var x = Math.pow((1 - t), 3) * referencePoints[0].x + 3 * Math.pow((1 - t), 2) * t * referencePoints[1].x + 3 * (1 - t) * Math.pow(t, 2) * referencePoints[2].x + Math.pow(t, 3) * referencePoints[3].x;
-            var y = Math.pow((1 - t), 3) * referencePoints[0].y + 3 * Math.pow((1 - t), 2) * t * referencePoints[1].y + 3 * (1 - t) * Math.pow(t, 2) * referencePoints[2].y + Math.pow(t, 3) * referencePoints[3].y;
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-        ctx.closePath();
-    };
-    var hightlightReferencePointsWithDottedLines = function (referencePoints, ctx) {
-        if (referencePoints.length === 0) {
-            return;
-        }
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([5]);
-        ctx.beginPath();
-        ctx.moveTo(referencePoints[0].x, referencePoints[0].y);
-        for (var i = 1; i < referencePoints.length; i++) {
-            ctx.lineTo(referencePoints[i].x, referencePoints[i].y);
-        }
-        ctx.closePath();
-        ctx.stroke();
-    };
-    var highlightReferencePoints = function (referencePoints, ctx) {
-        referencePoints.forEach(function (point) {
-            point.draw(ctx);
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+import * as THREE from "three";
+var drawCoordinateAxes = function (scene) {
+    var AXE_LINE_LENGTH = 90;
+    var AXE_ARROW_LENGTH = AXE_LINE_LENGTH / 20;
+    var AXE_DIVISION_LENGTH = 5;
+    var material = new THREE.LineBasicMaterial({
+        linewidth: 5,
+    });
+    // Построение прямых осей
+    var coordinateAxesPoints = [];
+    coordinateAxesPoints.push(new THREE.Vector3(0, AXE_LINE_LENGTH, 0));
+    coordinateAxesPoints.push(new THREE.Vector3(0, 0, 0));
+    coordinateAxesPoints.push(new THREE.Vector3(AXE_LINE_LENGTH, 0, 0));
+    var coordinateAxesGeometry = new THREE.BufferGeometry().setFromPoints(coordinateAxesPoints);
+    var coordinateAxes = new THREE.Line(coordinateAxesGeometry, material);
+    scene.add(coordinateAxes);
+    // Построение стрелки оси Y
+    var yArrowPoints = [];
+    yArrowPoints.push(new THREE.Vector3(-AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH, 0));
+    yArrowPoints.push(new THREE.Vector3(0, AXE_LINE_LENGTH, 0));
+    yArrowPoints.push(new THREE.Vector3(AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH, 0));
+    var yArrowGeometry = new THREE.BufferGeometry().setFromPoints(yArrowPoints);
+    var yArrow = new THREE.Line(yArrowGeometry, material);
+    scene.add(yArrow);
+    // Построение делений оси Y
+    for (var i = AXE_DIVISION_LENGTH; i < AXE_LINE_LENGTH; i += AXE_DIVISION_LENGTH) {
+        var coordinateDividerPoints = [];
+        coordinateDividerPoints.push(new THREE.Vector3(-2, AXE_LINE_LENGTH - i, 0));
+        coordinateDividerPoints.push(new THREE.Vector3(2, AXE_LINE_LENGTH - i, 0));
+        var coordinateDividerGeometry = new THREE.BufferGeometry().setFromPoints(coordinateDividerPoints);
+        var divider = new THREE.Line(coordinateDividerGeometry, material);
+        scene.add(divider);
+    }
+    // Построение стрелки оси X
+    var xArrowPoints = [];
+    xArrowPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, -AXE_ARROW_LENGTH, 0));
+    xArrowPoints.push(new THREE.Vector3(AXE_LINE_LENGTH, 0, 0));
+    xArrowPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, AXE_ARROW_LENGTH, 0));
+    var xArrowGeometry = new THREE.BufferGeometry().setFromPoints(xArrowPoints);
+    var xArrow = new THREE.Line(xArrowGeometry, material);
+    scene.add(xArrow);
+    // Построение делений оси X
+    for (var i = AXE_DIVISION_LENGTH; i < AXE_LINE_LENGTH; i += AXE_DIVISION_LENGTH) {
+        var coordinateDividerPoints = [];
+        coordinateDividerPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - i, -2, 0));
+        coordinateDividerPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - i, 2, 0));
+        var coordinateDividerGeometry = new THREE.BufferGeometry().setFromPoints(coordinateDividerPoints);
+        var divider = new THREE.Line(coordinateDividerGeometry, material);
+        scene.add(divider);
+    }
+};
+var drawBezierCurve = function (referencePoints, scene) {
+    var _a;
+    var curve = new ((_a = THREE.CubicBezierCurve3).bind.apply(_a, __spreadArray([void 0], referencePoints, false)))();
+    var points = curve.getPoints(50);
+    var geometry = new THREE.BufferGeometry().setFromPoints(points);
+    var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    var curveObject = new THREE.Line(geometry, material);
+    scene.add(curveObject);
+};
+var hightlightReferencePointsWithDottedLines = function (referencePoints, scene) {
+    var material = new THREE.LineDashedMaterial({
+        linewidth: 1,
+        dashSize: 1,
+        gapSize: 2,
+    });
+    var geometry = new THREE.BufferGeometry().setFromPoints(referencePoints);
+    var dottedLines = new THREE.Line(geometry, material);
+    dottedLines.computeLineDistances();
+    scene.add(dottedLines);
+};
+var highlightReferencePoints = function (referencePoints, scene) {
+    // Построение контрольных точек кривой
+    for (var i = 0; i < referencePoints.length; i++) {
+        var dotGeometry = new THREE.BufferGeometry();
+        dotGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(referencePoints[i]), 3));
+        var dotMaterial = new THREE.PointsMaterial({
+            size: 7,
+            sizeAttenuation: false,
         });
-        hightlightReferencePointsWithDottedLines(referencePoints, ctx);
+        var dot = new THREE.Points(dotGeometry, dotMaterial);
+        scene.add(dot);
+    }
+    hightlightReferencePointsWithDottedLines(referencePoints, scene);
+};
+var clearScene = function (scene) {
+    while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+    }
+};
+var main = function () {
+    var renderer = new THREE.WebGLRenderer();
+    var SCENE_WIDTH = 500;
+    var SCENE_HEIGHT = 500;
+    renderer.setSize(SCENE_WIDTH, SCENE_HEIGHT);
+    document.body.appendChild(renderer.domElement);
+    var camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 0.1);
+    camera.position.set(0, 0, 1);
+    camera.lookAt(0, 0, 0);
+    var scene = new THREE.Scene();
+    var referencePoints = [
+        new THREE.Vector3(30, 70, 0),
+        new THREE.Vector3(40, 90, 0),
+        new THREE.Vector3(50, 70, 0),
+        new THREE.Vector3(40, 20, 0),
+    ];
+    var drawScene = function () {
+        clearScene(scene);
+        drawCoordinateAxes(scene);
+        drawBezierCurve(referencePoints, scene);
+        highlightReferencePoints(referencePoints, scene);
+        requestAnimationFrame(drawScene);
+        renderer.render(scene, camera);
     };
-    var makePointsDraggable = function (referencePoints, ctx, drawScene) {
-        var HITBOX_PX = 10;
-        var lastEventsPosition = { x: 0, y: 0 };
-        var draggingPointsIndex = -1;
-        document.addEventListener("mousedown", function (event) {
-            var canvasEventX = event.clientX - ctx.canvas.getBoundingClientRect().left;
-            var canvasEventY = event.clientY - ctx.canvas.getBoundingClientRect().top;
-            if (canvasEventX > ctx.canvas.width || canvasEventY > ctx.canvas.height) {
-                return;
-            }
-            var hasHorizontalMatch = function (point) { return canvasEventX >= point.x - Math.round(point.radius / 2) - HITBOX_PX && canvasEventX <= point.x + Math.round(point.radius / 2) + HITBOX_PX; };
-            var hasVerticalMatch = function (point) { return canvasEventY >= point.y - Math.round(point.radius / 2) - HITBOX_PX && canvasEventY <= point.y + Math.round(point.radius / 2) + HITBOX_PX; };
-            var mousedownedReferencePointsIndex = referencePoints.findIndex(function (point) { return hasHorizontalMatch(point) && hasVerticalMatch(point); });
-            if (mousedownedReferencePointsIndex !== -1) {
-                lastEventsPosition.x = canvasEventX;
-                lastEventsPosition.y = canvasEventY;
-                draggingPointsIndex = mousedownedReferencePointsIndex;
-            }
-        });
-        document.addEventListener("mousemove", function (event) {
-            var canvasEventX = event.clientX - ctx.canvas.getBoundingClientRect().left;
-            var canvasEventY = event.clientY - ctx.canvas.getBoundingClientRect().top;
-            if (canvasEventX <= ctx.canvas.width && canvasEventY <= ctx.canvas.height && draggingPointsIndex !== -1) {
-                referencePoints[draggingPointsIndex].x = referencePoints[draggingPointsIndex].x + canvasEventX - lastEventsPosition.x;
-                referencePoints[draggingPointsIndex].y = referencePoints[draggingPointsIndex].y + canvasEventY - lastEventsPosition.y;
-                lastEventsPosition.y = canvasEventY;
-                lastEventsPosition.x = canvasEventX;
-                drawScene();
-            }
-        });
-        document.addEventListener("mouseup", function (event) {
-            if (draggingPointsIndex !== -1) {
-                draggingPointsIndex = -1;
-            }
-        });
-    };
-    var clearCanvas = function (ctx) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    };
-    var main = function () {
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-        if (!ctx) {
-            return;
-        }
-        var referencePoints = [new CPoint_1.CPoint(50, 300, 3), new CPoint_1.CPoint(30, 50, 3), new CPoint_1.CPoint(150, 10, 3), new CPoint_1.CPoint(270, 300, 3)];
-        var coordinateAxesMargin = 10;
-        var drawScene = function () {
-            clearCanvas(ctx);
-            drawCoordinateAxes(coordinateAxesMargin, ctx);
-            drawBezierCurve(referencePoints, ctx);
-            highlightReferencePoints(referencePoints, ctx);
-        };
-        drawScene();
-        makePointsDraggable(referencePoints, ctx, drawScene);
-    };
-    exports.main = main;
-});
+    drawScene();
+};
+main();
