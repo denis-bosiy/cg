@@ -4,15 +4,16 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
   const AXE_LINE_LENGTH: number = 90;
   const AXE_ARROW_LENGTH: number = AXE_LINE_LENGTH / 20;
   const AXE_DIVISION_LENGTH: number = 5;
+
   const material = new THREE.LineBasicMaterial({
     linewidth: 5,
   });
 
   // Построение прямых осей
   const coordinateAxesPoints = [];
-  coordinateAxesPoints.push(new THREE.Vector3(0, AXE_LINE_LENGTH, 0));
-  coordinateAxesPoints.push(new THREE.Vector3(0, 0, 0));
-  coordinateAxesPoints.push(new THREE.Vector3(AXE_LINE_LENGTH, 0, 0));
+  coordinateAxesPoints.push(new THREE.Vector2(0, AXE_LINE_LENGTH));
+  coordinateAxesPoints.push(new THREE.Vector2(0, 0));
+  coordinateAxesPoints.push(new THREE.Vector2(AXE_LINE_LENGTH, 0));
 
   const coordinateAxesGeometry = new THREE.BufferGeometry().setFromPoints(
     coordinateAxesPoints
@@ -24,11 +25,11 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
   // Построение стрелки оси Y
   const yArrowPoints = [];
   yArrowPoints.push(
-    new THREE.Vector3(-AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH, 0)
+    new THREE.Vector2(-AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH)
   );
-  yArrowPoints.push(new THREE.Vector3(0, AXE_LINE_LENGTH, 0));
+  yArrowPoints.push(new THREE.Vector2(0, AXE_LINE_LENGTH));
   yArrowPoints.push(
-    new THREE.Vector3(AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH, 0)
+    new THREE.Vector2(AXE_ARROW_LENGTH, AXE_LINE_LENGTH - AXE_ARROW_LENGTH)
   );
 
   const yArrowGeometry = new THREE.BufferGeometry().setFromPoints(yArrowPoints);
@@ -42,8 +43,8 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
     i += AXE_DIVISION_LENGTH
   ) {
     const coordinateDividerPoints = [];
-    coordinateDividerPoints.push(new THREE.Vector3(-2, AXE_LINE_LENGTH - i, 0));
-    coordinateDividerPoints.push(new THREE.Vector3(2, AXE_LINE_LENGTH - i, 0));
+    coordinateDividerPoints.push(new THREE.Vector2(-2, AXE_LINE_LENGTH - i));
+    coordinateDividerPoints.push(new THREE.Vector2(2, AXE_LINE_LENGTH - i));
 
     const coordinateDividerGeometry = new THREE.BufferGeometry().setFromPoints(
       coordinateDividerPoints
@@ -56,11 +57,11 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
   // Построение стрелки оси X
   const xArrowPoints = [];
   xArrowPoints.push(
-    new THREE.Vector3(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, -AXE_ARROW_LENGTH, 0)
+    new THREE.Vector2(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, -AXE_ARROW_LENGTH)
   );
-  xArrowPoints.push(new THREE.Vector3(AXE_LINE_LENGTH, 0, 0));
+  xArrowPoints.push(new THREE.Vector2(AXE_LINE_LENGTH, 0));
   xArrowPoints.push(
-    new THREE.Vector3(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, AXE_ARROW_LENGTH, 0)
+    new THREE.Vector2(AXE_LINE_LENGTH - AXE_ARROW_LENGTH, AXE_ARROW_LENGTH)
   );
 
   const xArrowGeometry = new THREE.BufferGeometry().setFromPoints(xArrowPoints);
@@ -74,8 +75,8 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
     i += AXE_DIVISION_LENGTH
   ) {
     const coordinateDividerPoints = [];
-    coordinateDividerPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - i, -2, 0));
-    coordinateDividerPoints.push(new THREE.Vector3(AXE_LINE_LENGTH - i, 2, 0));
+    coordinateDividerPoints.push(new THREE.Vector2(AXE_LINE_LENGTH - i, -2));
+    coordinateDividerPoints.push(new THREE.Vector2(AXE_LINE_LENGTH - i, 2));
 
     const coordinateDividerGeometry = new THREE.BufferGeometry().setFromPoints(
       coordinateDividerPoints
@@ -87,10 +88,10 @@ const drawCoordinateAxes = (scene: THREE.Scene) => {
 };
 
 const drawBezierCurve = (
-  referencePoints: THREE.Vector3[],
+  referencePoints: THREE.Vector2[],
   scene: THREE.Scene
 ) => {
-  const curve = new THREE.CubicBezierCurve3(...referencePoints);
+  const curve = new THREE.CubicBezierCurve(...referencePoints);
 
   const points = curve.getPoints(50);
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -101,12 +102,11 @@ const drawBezierCurve = (
   scene.add(curveObject);
 };
 
-const hightlightReferencePointsWithDottedLines = (
-  referencePoints: THREE.Vector3[],
+const hightlightDottedLines = (
+  referencePoints: THREE.Vector2[],
   scene: THREE.Scene
 ): void => {
   const material = new THREE.LineDashedMaterial({
-    linewidth: 1,
     dashSize: 1,
     gapSize: 2,
   });
@@ -119,7 +119,7 @@ const hightlightReferencePointsWithDottedLines = (
 };
 
 const highlightReferencePoints = (
-  referencePoints: THREE.Vector3[],
+  referencePoints: THREE.Vector2[],
   scene: THREE.Scene
 ): void => {
   // Построение контрольных точек кривой
@@ -127,7 +127,7 @@ const highlightReferencePoints = (
     const dotGeometry = new THREE.BufferGeometry();
     dotGeometry.setAttribute(
       "position",
-      new THREE.BufferAttribute(new Float32Array(referencePoints[i]), 3)
+      new THREE.BufferAttribute(new Float32Array(referencePoints[i]), 2)
     );
     const dotMaterial = new THREE.PointsMaterial({
       size: 7,
@@ -137,13 +137,7 @@ const highlightReferencePoints = (
     scene.add(dot);
   }
 
-  hightlightReferencePointsWithDottedLines(referencePoints, scene);
-};
-
-const clearScene = (scene: THREE.Scene): void => {
-  while (scene.children.length > 0) {
-    scene.remove(scene.children[0]);
-  }
+  hightlightDottedLines(referencePoints, scene);
 };
 
 const main = (): void => {
@@ -165,22 +159,21 @@ const main = (): void => {
 
   const scene: THREE.Scene = new THREE.Scene();
 
-  const referencePoints: THREE.Vector3[] = [
-    new THREE.Vector3(30, 70, 0),
-    new THREE.Vector3(40, 90, 0),
-    new THREE.Vector3(50, 70, 0),
-    new THREE.Vector3(40, 20, 0),
+  const referencePoints: THREE.Vector2[] = [
+    new THREE.Vector2(30, 70),
+    new THREE.Vector2(40, 90),
+    new THREE.Vector2(50, 70),
+    new THREE.Vector2(40, 20),
   ];
 
   const drawScene = () => {
-    clearScene(scene);
     drawCoordinateAxes(scene);
     drawBezierCurve(referencePoints, scene);
     highlightReferencePoints(referencePoints, scene);
-    renderer.render(scene, camera);
   };
 
   drawScene();
+  renderer.render(scene, camera);
 };
 
 main();

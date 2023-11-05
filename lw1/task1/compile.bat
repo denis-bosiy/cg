@@ -1,1 +1,1 @@
-call npx tsc -t es5 solution.ts --module amd
+call npx tsc -t es2015 solution.ts --module amd

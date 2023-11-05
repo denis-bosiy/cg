@@ -7,6 +7,6 @@ define(["require", "exports"], function (require, exports) {
         ModelMessageType["Victory"] = "victory";
         ModelMessageType["Defeat"] = "defeat";
         ModelMessageType["Continuation"] = "continuation";
-    })(ModelMessageType = exports.ModelMessageType || (exports.ModelMessageType = {}));
+    })(ModelMessageType || (exports.ModelMessageType = ModelMessageType = {}));
     ;
 });

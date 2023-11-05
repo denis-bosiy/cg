@@ -65,6 +65,9 @@ define(["require", "exports", "../Controller/Controller", "../Model/ModelMessage
                 }
             });
         };
+        // TODO: дОБАВИТЬ ВОПРОС ПОЛЬЗОВАТЕЛЮ
+        // TODO: Сделать так, чтобы по буквам было легче попадать
+        // TODO: Убрать из модели HangmanState, ScaffoldState
         View.prototype.update = function (data) {
             switch (data.type) {
                 case ModelMessageType_1.ModelMessageType.Defeat:

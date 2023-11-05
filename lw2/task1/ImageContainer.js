@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
             scene.draw(ctx);
             var lastEventPosition = { x: 0, y: 0 };
             var isDragging = false;
+            // TODO: Добавлять обработку события mousedown на ctx.canvas
             document.addEventListener("mousedown", function (event) {
                 var canvasEventX = event.clientX - ctx.canvas.getBoundingClientRect().left;
                 var canvasEventY = event.clientY - ctx.canvas.getBoundingClientRect().top;

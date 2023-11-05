@@ -49,6 +49,7 @@ export class Scene implements IPaintableScene {
             if (isMouseAtCanvas && isDragging) {
                 const DEFAULT_ELLIPSE_RADIUS: number = 10;
                 const newEllipse: Ellipse = new Ellipse(canvasEventX, canvasEventY, DEFAULT_ELLIPSE_RADIUS, DEFAULT_ELLIPSE_RADIUS, 0, this._penColor);
+                // TODO: Добавить оптимизацию(рисовать сразу на канвас)
                 this._ellipses.push(newEllipse);
                 newEllipse.draw(context);
             }

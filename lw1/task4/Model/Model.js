@@ -75,6 +75,7 @@ define(["require", "exports", "../utils/StringUtil", "./HangmanState", "./ModelM
             (_a = this._observers) === null || _a === void 0 ? void 0 : _a.forEach(function (o) { return o.update(data); });
         };
         Model.prototype.unhideNextPart = function () {
+            // TODO: unhide -> show
             if (!this.scaffoldState.bars[0]) {
                 this.scaffoldState.bars[0] = true;
                 return;

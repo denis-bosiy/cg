@@ -63,11 +63,11 @@ define(["require", "exports", "./RocketBuilder"], function (require, exports, Ro
         });
         document.addEventListener("keyup", function (event) {
             if (event.code === "Space") {
-                hasLaunched = true;
-                rocket.jetStream = builder.buildJetStream(totalDelta.x, totalDelta.y);
                 var DELTA_1 = 1000 / 24;
                 var ACCELERATION_1 = 0.1;
                 var t_1 = 0;
+                hasLaunched = true;
+                rocket.jetStream = builder.buildJetStream(totalDelta.x, totalDelta.y);
                 setInterval(function () {
                     var deltaY = ACCELERATION_1 * (t_1 * t_1 / 1000000) / 2;
                     rocket.changePosition(0, -deltaY);

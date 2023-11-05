@@ -228,7 +228,7 @@ export default class BarashDrawer {
         { x: 113 + offsetX, y: -30 + offsetY },
         { x: 123 + offsetX, y: 5 + offsetY }
       );
-      // Прававя половина копыта
+      // Правая половина копыта
       drawHoofsPart(
         { x: 123 + offsetX, y: 5 + offsetY },
         { x: 130 + offsetX, y: -28 + offsetY },

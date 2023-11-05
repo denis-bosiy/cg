@@ -1,4 +1,4 @@
-define(["require", "exports", "./ImageContainer", "./Scene"], function (require, exports, ImageContainer_1, Scene_1) {
+define(["require", "exports", "./CanvasToBmp", "./ImageContainer", "./Scene"], function (require, exports, CanvasToBmp_1, ImageContainer_1, Scene_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.main = void 0;
@@ -13,9 +13,12 @@ define(["require", "exports", "./ImageContainer", "./Scene"], function (require,
         image.src = URL.createObjectURL(content);
     };
     var exportCanvasImage = function (ctx, type, extension) {
-        var link = document.createElement('a');
-        link.download = 'download.' + extension;
-        link.href = ctx.canvas.toDataURL(type);
+        var link = document.createElement("a");
+        link.download = "download." + extension;
+        link.href =
+            type === "image/bmp"
+                ? CanvasToBmp_1.CanvasToBMP.ToDataURL(ctx.canvas)
+                : ctx.canvas.toDataURL(type);
         link.click();
         link.remove();
     };
@@ -56,13 +59,13 @@ define(["require", "exports", "./ImageContainer", "./Scene"], function (require,
                     fileInput.click();
                     break;
                 case "save-png-file":
-                    exportCanvasImage(ctx, 'image/png', 'png');
+                    exportCanvasImage(ctx, "image/png", "png");
                     break;
                 case "save-jpg-file":
-                    exportCanvasImage(ctx, 'image/jpeg', 'jpeg');
+                    exportCanvasImage(ctx, "image/jpeg", "jpeg");
                     break;
                 case "save-bmp-file":
-                    exportCanvasImage(ctx, 'image/bmp', 'bmp');
+                    exportCanvasImage(ctx, "image/bmp", "bmp");
                     break;
                 case "new-file":
                     scene.clear(ctx);

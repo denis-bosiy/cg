@@ -17,8 +17,8 @@ export class Ellipse {
 
     public draw(context: CanvasRenderingContext2D): void {
         context.fillStyle = this.color;
-        context.lineWidth = 1;
-        context.strokeStyle = this.color;
+        // TODO: Убрать обводку эллипсов. Сброс альфа-канала у strokeStyle не работает по-правильному
+        context.strokeStyle = "rgba(0,0,0,0)";
 
         context.beginPath();
         context.ellipse(this.x, this.y, this.radiusX, this.radiusY, 0, 0, 360);

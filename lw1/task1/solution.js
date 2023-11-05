@@ -2,39 +2,43 @@ define(["require", "exports", "./LetterDrawingSettings", "./LetterValue", "./Lin
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.main = void 0;
-    var LETTER_SIZE_COEF = 12;
-    var START_VELOCITY = 40;
-    var ACCELERATION = 10;
-    var LETTERS_HORIZONTAL_OFFSET = 15 * LETTER_SIZE_COEF;
-    var DELTA = 20;
-    var VELOCITY_DECREASING_VALUE = 9;
-    var availableLetters = new Map();
+    const LETTER_SIZE_COEF = 12;
+    const START_VELOCITY = 40;
+    const ACCELERATION = 10;
+    const LETTERS_HORIZONTAL_OFFSET = 15 * LETTER_SIZE_COEF;
+    const DELTA = 20;
+    const VELOCITY_DECREASING_VALUE = 9;
+    const availableLetters = new Map();
     availableLetters.set("Б", new LetterDrawingSettings_1.LetterDrawingSettings([new Line_1.Line(0, 0, 10, 0), new Line_1.Line(0, 0, 0, 20), new Line_1.Line(0, 10, 10, 10), new Line_1.Line(10, 10, 10, 20), new Line_1.Line(10, 20, 0, 20)], 5, "blue"));
     availableLetters.set("Д", new LetterDrawingSettings_1.LetterDrawingSettings([new Line_1.Line(3, 0, 7, 0), new Line_1.Line(3, 0, 3, 15), new Line_1.Line(7, 0, 7, 15), new Line_1.Line(0, 15, 10, 15), new Line_1.Line(0, 15, 0, 20), new Line_1.Line(10, 15, 10, 20)], 5, "red"));
     availableLetters.set("В", new LetterDrawingSettings_1.LetterDrawingSettings([new Line_1.Line(0, 0, 9, 0), new Line_1.Line(0, 0, 0, 20), new Line_1.Line(0, 10, 6, 10), new Line_1.Line(6, 10, 9, 20), new Line_1.Line(9, 20, 0, 20), new Line_1.Line(9, 0, 6, 10)], 5, "yellow"));
-    var drawLetter = function (context, letterDrawingSettings, horizontalOffset, verticalOffset) {
+    const drawLetter = (context, letterDrawingSettings, horizontalOffset, verticalOffset) => {
         context.beginPath();
         context.strokeStyle = letterDrawingSettings.color;
         context.lineWidth = letterDrawingSettings.lineWidth * LETTER_SIZE_COEF / 3;
-        letterDrawingSettings.lines.forEach(function (line) {
+        letterDrawingSettings.lines.forEach((line) => {
             context.moveTo(line.x0 * LETTER_SIZE_COEF + horizontalOffset + context.lineWidth, line.y0 * LETTER_SIZE_COEF + verticalOffset + context.lineWidth);
             context.lineTo(line.x1 * LETTER_SIZE_COEF + horizontalOffset + context.lineWidth, line.y1 * LETTER_SIZE_COEF + verticalOffset + context.lineWidth);
         });
         context.closePath();
         context.stroke();
     };
-    var getMaxHeight = function (velocity) {
+    const getMaxHeight = (velocity) => {
         return velocity * velocity / 2 / ACCELERATION;
     };
-    var getChangeDirectionTime = function (velocity) {
+    const getChangeDirectionTime = (velocity) => {
+        // Derivative of y = y0 + V0*t - (a*t^2)/2 by t
+        // V0 - a*t = 0
+        // a/t=V0
+        // t=V0/a
         return velocity / ACCELERATION;
     };
-    var runLetterAnimation = function (context, index, letterDrawingSettings) {
-        var t = 0;
-        var isGoingUp = true;
-        var currentVelocity = START_VELOCITY;
-        var changeDirectionTime = getChangeDirectionTime(START_VELOCITY);
-        var interval = setInterval(function () {
+    const runLetterAnimation = (context, index, letterDrawingSettings) => {
+        let t = 0;
+        let isGoingUp = true;
+        let currentVelocity = START_VELOCITY;
+        let changeDirectionTime = getChangeDirectionTime(START_VELOCITY);
+        const interval = setInterval(() => {
             t += DELTA;
             if (t % (changeDirectionTime * 1000) === 0) {
                 t = 0;
@@ -47,9 +51,9 @@ define(["require", "exports", "./LetterDrawingSettings", "./LetterValue", "./Lin
                 }
                 isGoingUp = !isGoingUp;
             }
-            var verticalOffset = -200;
-            var maxHeight = getMaxHeight(currentVelocity);
-            // y = y0 + Vot + (a*t^2)/2
+            let verticalOffset = -200;
+            const maxHeight = getMaxHeight(currentVelocity);
+            // y = y0 + V0*t + (a*t^2)/2
             if (isGoingUp) {
                 verticalOffset += -ACCELERATION / 2 * t * t / 1000000 + currentVelocity * t / 1000;
             }
@@ -61,35 +65,35 @@ define(["require", "exports", "./LetterDrawingSettings", "./LetterValue", "./Lin
             drawLetter(context, letterDrawingSettings, index * LETTERS_HORIZONTAL_OFFSET, verticalOffset);
         }, DELTA);
     };
-    var main = function () {
-        var letterValues = [new LetterValue_1.LetterValue("Б", 0), new LetterValue_1.LetterValue("Д", 1000), new LetterValue_1.LetterValue("В", 2000)];
-        var canvas = document.getElementById("canvas");
+    const main = () => {
+        const letterValues = [new LetterValue_1.LetterValue("Б", 0), new LetterValue_1.LetterValue("Д", 1000), new LetterValue_1.LetterValue("В", 2000)];
+        const canvas = document.getElementById("canvas");
         if (!canvas) {
             return;
         }
-        var context = canvas.getContext("2d");
+        const context = canvas.getContext("2d");
         if (!context) {
             return;
         }
-        letterValues.forEach(function (value, index) {
+        letterValues.forEach((value, index) => {
             if (!availableLetters.has(value.value)) {
                 return;
             }
-            var letterDrawingSettings = availableLetters.get(value.value);
+            const letterDrawingSettings = availableLetters.get(value.value);
             if (!letterDrawingSettings) {
                 return;
             }
             drawLetter(context, letterDrawingSettings, index * LETTERS_HORIZONTAL_OFFSET, 200);
         });
-        letterValues.forEach(function (value, index) {
+        letterValues.forEach((value, index) => {
             if (!availableLetters.has(value.value)) {
                 return;
             }
-            var letterDrawingSettings = availableLetters.get(value.value);
+            const letterDrawingSettings = availableLetters.get(value.value);
             if (!letterDrawingSettings) {
                 return;
             }
-            setTimeout(function () {
+            setTimeout(() => {
                 runLetterAnimation(context, index, letterDrawingSettings);
             }, value.phaseShift);
         });
