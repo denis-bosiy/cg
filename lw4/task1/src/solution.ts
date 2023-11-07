@@ -30,23 +30,21 @@ const main = (): void => {
   const animate = () => {
     requestAnimationFrame(animate);
 
-    const radius: number = 50,
-      segments: number = 0,
-      outlineMaterial: THREE.LineBasicMaterial = new THREE.LineBasicMaterial({
-        color: 0x000000,
-      }),
-      fillMaterial: THREE.Material = new THREE.MeshNormalMaterial({}),
-      geometry: THREE.DodecahedronGeometry = new THREE.DodecahedronGeometry(
-        radius,
-        segments
-      );
-
-    scene.add(new THREE.Line(geometry, outlineMaterial));
-    scene.add(new THREE.Mesh(geometry, fillMaterial));
-
     renderer.render(scene, camera);
   };
 
+  const radius: number = 50,
+    segments: number = 0,
+    outlineMaterial: THREE.LineBasicMaterial = new THREE.LineBasicMaterial({
+      color: 0x000000,
+    }),
+    fillMaterial: THREE.Material = new THREE.MeshNormalMaterial({}),
+    geometry: THREE.DodecahedronGeometry = new THREE.DodecahedronGeometry(
+      radius,
+      segments
+    );
+  scene.add(new THREE.Line(geometry, outlineMaterial));
+  scene.add(new THREE.Mesh(geometry, fillMaterial));
   animate();
 };
 

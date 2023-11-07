@@ -30,22 +30,19 @@ const main = (): void => {
   const animate = () => {
     requestAnimationFrame(animate);
 
-    const outlineMaterial: THREE.LineBasicMaterial = new THREE.LineBasicMaterial({
-        color: 0x000000,
-      }),
-      fillMaterial: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color: 0x6aff46,
-      }),
-      geometry: THREE.TorusGeometry = new THREE.TorusGeometry(
-        40, 20
-      );
-
-    scene.add(new THREE.Line(geometry, outlineMaterial));
-    scene.add(new THREE.Mesh(geometry, fillMaterial));
-
     renderer.render(scene, camera);
   };
 
+  const outlineMaterial: THREE.LineBasicMaterial = new THREE.LineBasicMaterial({
+      color: 0x000000,
+    }),
+    fillMaterial: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
+      color: 0x6aff46,
+    }),
+    geometry: THREE.TorusGeometry = new THREE.TorusGeometry(40, 20);
+
+  scene.add(new THREE.Line(geometry, outlineMaterial));
+  scene.add(new THREE.Mesh(geometry, fillMaterial));
   animate();
 };
 
