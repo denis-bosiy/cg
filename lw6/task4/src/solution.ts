@@ -50,8 +50,8 @@ const main = (): void => {
     void main()
     {     
       vec2 centerVector = -1.0 + 2.0 * vUv;
-      vec2 centerOfWaves = -1.0 + 2.0 * uVCenterOfWaves;
-      centerVector += centerOfWaves;
+      vec2 centerOfWavesImpulse = -1.0 + 2.0 * uVCenterOfWaves;
+      centerVector += centerOfWavesImpulse;
 
       float wavesRadius = 0.1;
       float innterCircleSpeedCoef = 1.3;
@@ -63,7 +63,7 @@ const main = (): void => {
       if (length(centerVector) > distanceToCircleFromCenter && length(centerVector) <= distanceToOuterCircleFromCenter)
       {
         // y(x,t)=Asin(kx−ωt+φ) -- функция волны
-        // A - амплитуда волны(произвольный коэффициент)
+        // A - амплитуда волны(подбирается вручную)
         // x - длина от центра до текущей координаты
         // t - время
         // k=2π/λ - волновое число

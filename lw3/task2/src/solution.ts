@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import BarashDrawer from "./BarashDrawer";
+import { DragControls } from "three/examples/jsm/controls/DragControls";
 
 const main = (): void => {
   const SCENE_WIDTH: number = 500;
@@ -24,8 +25,18 @@ const main = (): void => {
 
   const scene: THREE.Scene = new THREE.Scene();
 
-  BarashDrawer.Draw(scene);
-  renderer.render(scene, camera);
+  const barash: THREE.Group = BarashDrawer.GetBarash();
+  scene.add(barash);
+  const controls: DragControls = new DragControls(
+    [barash],
+    camera,
+    renderer.domElement
+  );
+  controls.transformGroup = true;
+
+  const render = (): void => renderer.render(scene, camera);
+  controls.addEventListener("drag", render);
+  render();
 };
 
 main();

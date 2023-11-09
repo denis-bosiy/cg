@@ -30,14 +30,14 @@ const main = (): void => {
   const verticesFloat: Float32Array = new Float32Array(vertices.flat());
   geometry.setAttribute('position', new THREE.BufferAttribute(verticesFloat, 3));
 
-  const fragmentShader: string = /*glsl*/ `
+  const fragmentShader: string = /*glsl*/`
     void main()
     {     
       gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
     }
     `;
 
-  const vertexShader: string = /*glsl*/ `
+  const vertexShader: string = /*glsl*/`
     float getR(float x) {
         return (1.0 + sin(x))*(1.0 + 0.9 * cos(8.0 * x))*(1.0 + 0.1 * cos(24.0 * x)) * (0.5 + 0.05 * cos(140.0 * x));
     }

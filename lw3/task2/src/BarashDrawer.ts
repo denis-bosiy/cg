@@ -16,7 +16,7 @@ export default class BarashDrawer {
     aRotation: number,
     curveStartAngle: number,
     curveEndAngle: number,
-    scene: THREE.Scene,
+    barash: THREE.Group,
     renderOrder: number
   ) {
     const fillMaterial = new THREE.MeshBasicMaterial({ color: 0xfcd0eb });
@@ -58,11 +58,11 @@ export default class BarashDrawer {
     );
     ellipseFill.renderOrder = renderOrder;
     ellipseOutline.renderOrder = renderOrder;
-    scene.add(ellipseFill);
-    scene.add(ellipseOutline);
+    barash.add(ellipseFill);
+    barash.add(ellipseOutline);
   }
 
-  private static DrawBody(scene: THREE.Scene): void {
+  private static DrawBody(barash: THREE.Group): void {
     const fillMaterial = new THREE.MeshBasicMaterial({ color: 0xfcd0eb });
 
     const furCircles: any[][] = [
@@ -111,7 +111,7 @@ export default class BarashDrawer {
         furCircleData[7],
         furCircleData[8],
         furCircleData[9],
-        scene,
+        barash,
         1
       )
     );
@@ -124,10 +124,10 @@ export default class BarashDrawer {
     );
     const bodyFill = new THREE.Mesh(bodyFillGeometry, fillMaterial);
     bodyFill.renderOrder = 2;
-    scene.add(bodyFill);
+    barash.add(bodyFill);
   }
 
-  private static DrawHorns(scene: THREE.Scene): void {
+  private static DrawHorns(barash: THREE.Group): void {
     const material = new THREE.MeshBasicMaterial({ color: 0x7a3b92 });
 
     const drawHorn = (
@@ -152,14 +152,14 @@ export default class BarashDrawer {
       );
       const horn = new THREE.Mesh(hornGeometry, material);
       horn.renderOrder = renderOrder;
-      scene.add(horn);
+      barash.add(horn);
     };
 
     drawHorn(0, 0, 70, 0);
     drawHorn(-60, -15, 70, 3);
   }
 
-  private static DrawEar(scene: THREE.Scene) {
+  private static DrawEar(barash: THREE.Group) {
     const material = new THREE.LineBasicMaterial({ color: 0x7a3b92 });
 
     const earCurve = new THREE.EllipseCurve(
@@ -178,10 +178,10 @@ export default class BarashDrawer {
     const ear = new THREE.Line(earOutlineGeometry, material);
     ear.renderOrder = 3;
 
-    scene.add(ear);
+    barash.add(ear);
   }
 
-  private static DrawHands(scene: THREE.Scene) {
+  private static DrawHands(barash: THREE.Group) {
     const drawHand = (
       offsetX: number,
       offsetY: number,
@@ -199,7 +199,7 @@ export default class BarashDrawer {
         toRadians(angle),
         0,
         Math.PI * 2,
-        scene,
+        barash,
         renderOrder
       );
 
@@ -220,7 +220,7 @@ export default class BarashDrawer {
           new THREE.MeshBasicMaterial({ color: 0x7a3b92 })
         );
         halfOfTheHoof.renderOrder = renderOrder;
-        scene.add(halfOfTheHoof);
+        barash.add(halfOfTheHoof);
       };
       // Левая половина копыта
       drawHoofsPart(
@@ -240,7 +240,7 @@ export default class BarashDrawer {
     drawHand(95, 40, 20, 0);
   }
 
-  private static DrawLegs(scene: THREE.Scene) {
+  private static DrawLegs(barash: THREE.Group) {
     const drawLeg = (offsetX, offsetY) => {
       this.DrawOutlinedEllipse(
         150 + offsetX,
@@ -253,7 +253,7 @@ export default class BarashDrawer {
         toRadians(40),
         0,
         Math.PI * 2,
-        scene,
+        barash,
         0
       );
 
@@ -274,7 +274,7 @@ export default class BarashDrawer {
           new THREE.MeshBasicMaterial({ color: 0x7a3b92 })
         );
         halfOfTheHoof.renderOrder = 3;
-        scene.add(halfOfTheHoof);
+        barash.add(halfOfTheHoof);
       };
       // Левая половина копыта
       drawHoofsPart(
@@ -294,7 +294,7 @@ export default class BarashDrawer {
     drawLeg(35, 25);
   }
 
-  private static DrawEyebrows(scene: THREE.Scene) {
+  private static DrawEyebrows(barash: THREE.Group) {
     const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
       color: 0x894590,
     });
@@ -310,7 +310,7 @@ export default class BarashDrawer {
       );
       const eyebrow: THREE.Mesh = new THREE.Mesh(eyebrowGeometry, material);
       eyebrow.renderOrder = 3;
-      scene.add(eyebrow);
+      barash.add(eyebrow);
     };
 
     drawEyebrow([
@@ -327,7 +327,7 @@ export default class BarashDrawer {
     ]);
   }
 
-  private static DrawEyes(scene: THREE.Scene) {
+  private static DrawEyes(barash: THREE.Group) {
     const scleraFillMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const scleraOutlineMaterial = new THREE.LineBasicMaterial({
       color: 0x7a3b92,
@@ -351,7 +351,7 @@ export default class BarashDrawer {
       );
       const scleraFill = new THREE.Mesh(scleraFillGeometry, scleraFillMaterial);
       scleraFill.renderOrder = 3;
-      scene.add(scleraFill);
+      barash.add(scleraFill);
       const scleraCurve = new THREE.EllipseCurve(
         x,
         y,
@@ -370,7 +370,7 @@ export default class BarashDrawer {
         scleraOutlineMaterial
       );
       sclearOutline.renderOrder = 3;
-      scene.add(sclearOutline);
+      barash.add(sclearOutline);
       const pupilPath: THREE.Shape = new THREE.Shape();
       pupilPath.absellipse(x, y, 4, 4, 0, Math.PI * 2, false, 0);
       const pupilGeometry: THREE.ShapeGeometry = new THREE.ShapeGeometry(
@@ -378,13 +378,13 @@ export default class BarashDrawer {
       );
       const pupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
       pupil.renderOrder = 3;
-      scene.add(pupil);
+      barash.add(pupil);
     };
     drawEye(165, 90, 40);
     drawEye(193, 93, 35);
   }
 
-  private static DrawNose(scene: THREE.Scene) {
+  private static DrawNose(barash: THREE.Group) {
     const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
       color: 0x894590,
     });
@@ -398,10 +398,10 @@ export default class BarashDrawer {
     );
     const nose: THREE.Mesh = new THREE.Mesh(noseGeometry, material);
     nose.renderOrder = 3;
-    scene.add(nose);
+    barash.add(nose);
   }
 
-  private static DrawMouth(scene: THREE.Scene) {
+  private static DrawMouth(barash: THREE.Group) {
     const material = new THREE.LineBasicMaterial({
       color: 0x7a3b92,
     });
@@ -418,22 +418,26 @@ export default class BarashDrawer {
     const mouth = new THREE.Line(geometry, material);
     mouth.renderOrder = 3;
 
-    scene.add(mouth);
+    barash.add(mouth);
   }
 
-  private static DrawFace(scene: THREE.Scene) {
-    this.DrawEyebrows(scene);
-    this.DrawEyes(scene);
-    this.DrawNose(scene);
-    this.DrawMouth(scene);
+  private static DrawFace(barash: THREE.Group) {
+    this.DrawEyebrows(barash);
+    this.DrawEyes(barash);
+    this.DrawNose(barash);
+    this.DrawMouth(barash);
   }
 
-  public static Draw(scene: THREE.Scene) {
-    this.DrawBody(scene);
-    this.DrawHorns(scene);
-    this.DrawEar(scene);
-    this.DrawHands(scene);
-    this.DrawLegs(scene);
-    this.DrawFace(scene);
+  public static GetBarash(): THREE.Group {
+    const barash: THREE.Group = new THREE.Group();
+
+    this.DrawBody(barash);
+    this.DrawHorns(barash);
+    this.DrawEar(barash);
+    this.DrawHands(barash);
+    this.DrawLegs(barash);
+    this.DrawFace(barash);
+
+    return barash;
   }
 }
