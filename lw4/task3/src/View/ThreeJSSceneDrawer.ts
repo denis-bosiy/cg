@@ -3,6 +3,7 @@ import { Ground } from "../Model/Ground";
 import { Wall } from "../Model/Wall";
 import { Goal } from "../Model/Goal";
 import { Enemy } from "../Model/Enemy";
+import { Vector3 } from "../Vector3";
 
 export class ThreeJSSceneDrawer {
   static DrawGround(scene: THREE.Scene, ground: Ground): void {
@@ -26,14 +27,14 @@ export class ThreeJSSceneDrawer {
     });
   }
 
-  static DrawMoonLight(scene: THREE.Scene): void {
+  static DrawMoonLight(scene: THREE.Scene, position: Vector3): void {
     const moonLight: THREE.PointLight = new THREE.PointLight(
       0xffffff,
       1000,
       600,
       1
     );
-    moonLight.position.set(300, 300, 300);
+    moonLight.position.set(position.x, position.y, position.z);
     moonLight.castShadow = true;
 
     scene.add(moonLight);

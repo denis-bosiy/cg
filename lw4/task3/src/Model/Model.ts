@@ -16,6 +16,7 @@ export class Model implements IPublisher {
   public goal: Goal;
   public enemy: Enemy;
   public isFlashlightTurnedOn: boolean = true;
+  public moonLightPosition: Vector3;
 
   private _subscribers: ISubscriber[] = [];
 

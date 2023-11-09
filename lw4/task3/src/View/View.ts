@@ -59,7 +59,7 @@ export class View implements ISubscriber {
     scene.add(axesHelper);
 
     ThreeJSSceneDrawer.DrawGround(scene, this._model.ground);
-    ThreeJSSceneDrawer.DrawMoonLight(scene);
+    ThreeJSSceneDrawer.DrawMoonLight(scene, this._model.moonLightPosition);
     this._flashlight = ThreeJSSceneDrawer.DrawFlashlightToTheCamera(
       this._camera
     );

@@ -49,6 +49,7 @@ model.goal = new Goal(
   0.3,
   "../textures/basketball.jpg"
 );
+model.moonLightPosition = new Vector3(300, 300, 300);
 model.enemy = new Enemy(5, 5, new Vector3(50, 0, 230), "../textures/enemy.jpg");
 const controller: Controller = new Controller(model);
 const view: View = new View(model, controller);

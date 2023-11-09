@@ -23,11 +23,15 @@ const main = (): void => {
     const fragmentShader: string = /*glsl*/ `
       uniform float radius;
       uniform float width;
-      uniform vec3 center;
+      uniform vec3 center1;
+      uniform vec3 center2;
 
       void main() {
         gl_FragColor = vec4(1, 0, 0, 1);
-        if (distance(vec3(gl_FragCoord), center) <= radius && distance(vec3(gl_FragCoord), center) >= width) {
+        if (distance(vec3(gl_FragCoord), center1) <= radius && distance(vec3(gl_FragCoord), center1) >= width) {
+          gl_FragColor = vec4(0, 0, 0, 1);
+        }
+        if (distance(vec3(gl_FragCoord), center2) <= radius && distance(vec3(gl_FragCoord), center2) >= width) {
           gl_FragColor = vec4(0, 0, 0, 1);
         }
       }
@@ -42,9 +46,12 @@ const main = (): void => {
         width: {
           value: 30,
         },
-        center: {
+        center1: {
           value: { x: 250, y: 250, z: 0 },
         },
+        center2: {
+          value: { x: 100, y: 100, z: 0}
+        }
       },
       fragmentShader,
     });
